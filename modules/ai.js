@@ -63,6 +63,16 @@ class AI {
                 log.info("prompt reset")
                 return
             }
+            if (text.split(' ')[0] == '!swap') {
+                if (processPersonality(text.split(' ')[1])) {
+                    this.openai.pers = text.split(' ')[1]
+                    this.openai.prompt = processPersonality(this.openai.pers)
+                    res("Prompt changed and personality reset. Current prompt: " + this.openai.pers)
+                } else {
+                    res("Prompt invalid. Case sensitive!")
+                }
+                return
+            }
             const response = await this.openai.createCompletion("code-davinci-002", { // replace code with text if you do not have codex
                     prompt: this.openai.prompt + text + '\nAI:',
                     temperature: 0.75,
@@ -75,7 +85,7 @@ class AI {
                 })
                 .catch(() => {
                     log.error("Response errored, most likely ratelimited.")
-                    res("/=:limit:=\\")
+                    res("Bot is rate limited. Please wait `10` seconds.")
                 })
         })
 

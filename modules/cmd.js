@@ -13,6 +13,7 @@ function setup (sprefix,saic,c) {
 function handle(m) {
   if (!prefix) {return log.error("Handler error, have you used the setup class?")}
   if (m.author.bot || m.author.id == client.user.id) {return}
+  if (!m.content) {return}
   if (m.content.split(' ')[0] == '!i') {return} // ignore message
   m.channel.startTyping()
   setTimeout(()=>{aic.processInput(m.content).then((r)=>{setTimeout(()=>{m.channel.send(r);m.channel.stopTyping()},r.length*20)});},30*m.content.length)
